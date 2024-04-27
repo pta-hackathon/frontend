@@ -3,7 +3,8 @@ const BASE_PATH = "http://localhost:8000/";
 interface User {
   id: number;
   name: string;
-  isLoggedIn: boolean;
+  isSignedIn: boolean;
+  competence: string | null;
 }
 
 type Confidence = "red" | "yellow" | "green";
