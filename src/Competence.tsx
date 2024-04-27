@@ -25,7 +25,7 @@ const Competence = () => {
   const [selectedCompetence, setSelectedCompetence] = useState<Competence | undefined>(undefined);
   return (
     <div className="grid h-full grid-cols-[1fr_2fr_1fr] grid-rows-[auto_1fr_auto_1fr] items-center gap-32 p-4">
-      <h1 className="col-span-3 pt-10 text-center text-6xl font-semibold text-white">Competence</h1>
+      <h1 className="col-span-3 pt-10 text-center text-6xl font-semibold">Competence</h1>
       <div></div>
       <div className="place-self-center self-end">
         <Player name="Alice" hasSelected />

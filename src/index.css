@@ -15,4 +15,7 @@
   .input {
     @apply rounded border px-2 py-1;
   }
+  .select {
+    @apply rounded border bg-white px-2 py-2;
+  }
 }

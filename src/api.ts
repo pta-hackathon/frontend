@@ -1,45 +1,14 @@
-const BASE_PATH = "http://localhost:8000/";
+import createClient from "openapi-fetch";
+import type { paths } from "./api-types";
 
-interface User {
-  id: number;
-  name: string;
-  isSignedIn: boolean;
-  competence: string | null;
-}
+export const client = createClient<paths>({ baseUrl: "http://172.17.28.33:8080/" });
 
-type Confidence = "red" | "yellow" | "green";
+export type User = paths["/userliste"]["get"]["responses"]["200"]["content"]["*/*"][0];
+export type Stage = "warte_logon" | "warte_kompetenz" | "warte_brainstorming" | "ende";
 
-export default {
-  getUsers: async (): Promise<User[]> => {
-    const response = await fetch(BASE_PATH + "userliste");
-    return response.json();
-  },
-  login: (username: string) => async (): Promise<void> => {
-    await fetch(BASE_PATH + "anmelden?user=" + username, {
-      method: "POST",
-    });
-  },
-  logout: async (): Promise<void> => {
-    await fetch(BASE_PATH + "logout", {
-      method: "POST",
-      credentials: "include",
-    });
-  },
-  start: async (): Promise<void> => {
-    const response = await fetch(BASE_PATH + "start", {
-      credentials: "include",
-      method: "POST",
-    });
-    console.log(response);
-  },
-  submitConfidence: async (confidence: Confidence): Promise<void> => {
-    await fetch(BASE_PATH + "confidence?confidence=" + confidence, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ confidence }),
-    });
-  },
+export const stageNames: Record<Stage, string> = {
+  warte_logon: "Waiting for all Users to join...",
+  warte_kompetenz: "Competence",
+  warte_brainstorming: "Brainstorming",
+  ende: "Results",
 };
