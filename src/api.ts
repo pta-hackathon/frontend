@@ -11,19 +11,13 @@ type Confidence = "red" | "yellow" | "green";
 
 export default {
   getUsers: async (): Promise<User[]> => {
-    const response = await fetch(BASE_PATH + "users");
+    const response = await fetch(BASE_PATH + "userliste");
     return response.json();
   },
-  login: (username: string) => async (): Promise<boolean> => {
-    await fetch(BASE_PATH + "login", {
+  login: (username: string) => async (): Promise<void> => {
+    await fetch(BASE_PATH + "anmelden?user=" + username, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ username }),
     });
-    return true;
   },
   logout: async (): Promise<void> => {
     await fetch(BASE_PATH + "logout", {
