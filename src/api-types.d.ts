@@ -64,6 +64,8 @@ export interface components {
       competence?: string;
       /** Format: int32 */
       isSignedIn?: number;
+      /** Format: int32 */
+      isTestUser?: number;
     };
     Tickets: {
       /** Format: int32 */
