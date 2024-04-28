@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { client, type Estimation, type User } from "./api";
 import { TICKET_ID } from "./Ticket";
+import Results from "./Results";
 
 const MIN = 0;
 const MAX = 20;
@@ -24,6 +25,7 @@ const Estimation = ({ user, users }: { user: User; users: User[] }) => {
   const [maxVal, setMaxVal] = useState<number>(2);
   const [tipEstimation, setTipEstimation] = useState<Estimation | undefined>(undefined);
   const [tipUser, setTipUser] = useState<number | undefined>(undefined);
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   const dialogRef = React.useRef<HTMLDialogElement>(null);
 
@@ -46,16 +48,6 @@ const Estimation = ({ user, users }: { user: User; users: User[] }) => {
     setMinVal(1);
     setMaxVal(2);
     await updateEstimations();
-  };
-
-  const sendEnd = async () => {
-    await client.POST("/", {
-      params: {
-        query: {
-          ticket: TICKET_ID,
-        },
-      },
-    });
   };
 
   useEffect(() => {
@@ -83,6 +75,8 @@ const Estimation = ({ user, users }: { user: User; users: User[] }) => {
     });
     dialogRef.current?.close();
   };
+
+  if (showResults) return <Results goBack={() => setShowResults(false)} />;
 
   return (
     <>
@@ -138,7 +132,7 @@ const Estimation = ({ user, users }: { user: User; users: User[] }) => {
         <button className="btn" onClick={sendEstimation}>
           Update Schätzung
         </button>
-        <button className="btn" onClick={sendEnd}>
+        <button className="btn" onClick={() => setShowResults(true)}>
           Schätzung abgeben
         </button>
       </div>

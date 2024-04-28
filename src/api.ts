@@ -9,6 +9,7 @@ export type Ticket = paths["/tickets"]["get"]["responses"]["200"]["content"]["*/
 export type Estimation = paths["/schaetzungen"]["get"]["responses"]["200"]["content"]["*/*"][0];
 export type BrainstormingItem = paths["/brainstorming"]["get"]["responses"]["200"]["content"]["*/*"][0];
 export type Competence = "rot" | "gelb" | "gruen";
+export type Result = paths["/calctabelle"]["get"]["responses"]["200"]["content"]["*/*"][0];
 
 export const stageNames: Record<Stage, string> = {
   warte_logon: "Warten auf Anmeldung",

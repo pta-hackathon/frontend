@@ -57,8 +57,6 @@ function App() {
           <Brainstorming user={user} users={users} />
         ) : stage2 === "ende_schaetzung" ? (
           <Estimation user={user} users={users} />
-        ) : stage2 === "ende" ? (
-          <Results />
         ) : null}
       </Poker>
     </div>
