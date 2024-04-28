@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { client, type Estimation, type User } from "./api";
 import { TICKET_ID } from "./Ticket";
 
@@ -17,20 +17,41 @@ const userIdToColor = (id: number) => {
   return colors[id % colors.length];
 };
 
-const Estimation = ({ user, users }: { user: User | null; users: User[] }) => {
+const Estimation = ({ user, users }: { user: User; users: User[] }) => {
   const otherUsers = users.filter((u) => u.name !== user?.name);
-  const [estimations, setEstimations] = useState<Estimation[]>([
-    { id: 1, idUser: 1, minVal: 2, maxVal: 5 },
-    { id: 2, idUser: 2, minVal: 4, maxVal: 12 },
-    { id: 3, idUser: 3, minVal: 1, maxVal: 2 },
-    { id: 4, idUser: 4, minVal: 5, maxVal: 16 },
-  ]);
+  const [estimations, setEstimations] = useState<Estimation[]>([]);
   const [minVal, setMinVal] = useState<number>(1);
   const [maxVal, setMaxVal] = useState<number>(2);
   const [tipEstimation, setTipEstimation] = useState<Estimation | undefined>(undefined);
   const [tipUser, setTipUser] = useState<number | undefined>(undefined);
 
   const dialogRef = React.useRef<HTMLDialogElement>(null);
+
+  const updateEstimations = async () => {
+    const result = await client.GET("/schaetzungen");
+    if (result.data) setEstimations(result.data);
+  };
+
+  const sendEstimation = async () => {
+    await client.POST("/schaetzung", {
+      params: {
+        query: {
+          username: user?.name || "",
+          minval: minVal,
+          maxval: maxVal,
+          ticket: TICKET_ID,
+        },
+      },
+    });
+    setMinVal(1);
+    setMaxVal(2);
+    await updateEstimations();
+  };
+
+  useEffect(() => {
+    const interval = setInterval(updateEstimations, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const showDialog = (e: Estimation) => () => {
     if (e.idUser === user?.id) return;
@@ -104,7 +125,9 @@ const Estimation = ({ user, users }: { user: User | null; users: User[] }) => {
             className="input w-24"
           />
         </div>
-        <button className="btn">Update Schätzung</button>
+        <button className="btn" onClick={sendEstimation}>
+          Update Schätzung
+        </button>
       </div>
       <dialog ref={dialogRef} className="rounded border bg-white p-4">
         <div className="flex w-64 flex-col gap-2">

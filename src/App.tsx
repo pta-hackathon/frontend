@@ -17,8 +17,8 @@ function App() {
     { id: 4, name: "Waldemar", competence: undefined, isSignedIn: 0, isTestUser: 1 },
   ]);
   const [stage, setStage] = useState<Stage>("warte_logon");
-  const stage2 = "warte_brainstorming" as Stage;
-  // const stage2 = stage;
+  // const stage2 = "warte_estimation" as Stage;
+  const stage2 = stage;
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -47,6 +47,8 @@ function App() {
       <Poker users={users} user={user}>
         {stage2 === "warte_logon" ? (
           <Waiting />
+        ) : !user ? (
+          <div className="text-center text-4xl font-bold text-white">Not logged in!</div>
         ) : stage2 === "warte_kompetenz" ? (
           <Competence user={user} />
         ) : stage2 === "warte_brainstorming" ? (

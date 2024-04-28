@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { User, client, competenceNames, type Competence as CompetenceType } from "./api";
 
-const Competence = ({ user }: { user: User | null }) => {
+const Competence = ({ user }: { user: User }) => {
   const [selectedCompetence, setSelectedCompetence] = useState<CompetenceType | "">("");
 
   const sendCompetence = async () => {

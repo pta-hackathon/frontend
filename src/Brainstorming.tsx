@@ -18,7 +18,7 @@ const BrainstormingItem = ({ username, text }: BrainstormingItemProps) => {
   );
 };
 
-const Brainstorming = ({ user, users }: { user: User | null; users: User[] }) => {
+const Brainstorming = ({ user, users }: { user: User; users: User[] }) => {
   const [text, setText] = useState<string>("");
   const [items, setItems] = useState<BrainstormingItemType[]>([]);
 
