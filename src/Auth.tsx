@@ -27,60 +27,49 @@ const Auth = ({
   }, []);
 
   useEffect(() => {
-    const username = localStorage.getItem("username");
-    if (username !== selectedUsername) {
-      setUser(null);
-      return;
-    }
-    const userIndex = users.findIndex((predicate) => predicate.name === username);
-    if (userIndex === -1) {
-      setUser(null);
-      return;
-    }
-    setUser(users[userIndex]);
+    const selectedUser = users.find((u) => u.name === selectedUsername);
+    setUser(selectedUser?.isSignedIn ? selectedUser : null);
   }, [users, selectedUsername]);
 
   const login = async () => {
     if (!selectedUsername) return;
     await client.POST("/anmelden", { params: { query: { user: selectedUsername } } });
     await reloadUsers();
-    localStorage.setItem("username", selectedUsername);
   };
 
   const logout = async () => {
     if (user?.name === undefined) return;
     await client.POST("/abmelden", { params: { query: { user: user.name } } });
     await reloadUsers();
-    localStorage.removeItem("username");
   };
 
   return (
     <div className="flex items-center gap-2">
-      {user ? (
+      {user && (
         <>
           <span className="text-lg text-white">
             Logged in as <span className="font-bold">{user.name}</span>
           </span>
-          <button className="btn" onClick={logout}>
-            Logout
-          </button>
         </>
+      )}
+      <select className="select" value={selectedUsername} onChange={(e) => setSelectedUsername(e.target.value)}>
+        <option disabled value="">
+          Select a user
+        </option>
+        {users.map((user) => (
+          <option key={user.id} value={user.name}>
+            {user.name}
+          </option>
+        ))}
+      </select>
+      {user ? (
+        <button className="btn" onClick={logout}>
+          Logout
+        </button>
       ) : (
-        <>
-          <select className="select" value={selectedUsername} onChange={(e) => setSelectedUsername(e.target.value)}>
-            <option disabled value="">
-              Select a user
-            </option>
-            {users.map((user) => (
-              <option key={user.id} value={user.name}>
-                {user.name}
-              </option>
-            ))}
-          </select>
-          <button className="btn" onClick={login} disabled={selectedUsername === ""}>
-            Login
-          </button>
-        </>
+        <button className="btn" onClick={login} disabled={selectedUsername === ""}>
+          Login
+        </button>
       )}
     </div>
   );
