@@ -4,12 +4,12 @@
 
 @layer base {
   .btn {
-    @apply cursor-pointer rounded border bg-white px-4 py-2 font-bold text-black hover:bg-gray-200;
+    @apply cursor-pointer rounded border bg-white px-6 py-2 font-bold text-black hover:bg-gray-200;
   }
   .input {
     @apply rounded border px-2 py-1 text-black;
   }
   .select {
-    @apply rounded border bg-white px-2 py-2 text-black;
+    @apply rounded border bg-white px-2 py-2 font-bold text-black hover:bg-gray-200;
   }
 }

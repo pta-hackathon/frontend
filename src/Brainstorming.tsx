@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 
-import Ticket from "./Ticket";
 import { Icon } from "@iconify/react";
-
-type Competence = "red" | "yellow" | "green";
 
 export const Player = ({ name, hasSelected }: { name: string; hasSelected: boolean }) => {
   return (
@@ -40,37 +37,23 @@ const BrainstormingItem = ({ username, text }: BrainstormingItemProps) => {
 const Brainstorming = () => {
   const [text, setText] = useState<string | undefined>(undefined);
   return (
-    <div className="grid h-full grid-cols-[1fr_2fr_1fr] grid-rows-[1fr_auto_1fr] items-center gap-32 p-4">
-      <div></div>
-      <div className="place-self-center self-end">
-        <Player name="Alice" hasSelected />
+    <>
+      <div className="flex flex-col flex-wrap gap-2">
+        {items.map((item) => (
+          <BrainstormingItem key={item.id} {...item} />
+        ))}
       </div>
-      <div></div>
-      <div className="place-self-end self-center">
-        <Player name="Bob" hasSelected={false} />
-      </div>
-      <div className="flex flex-col gap-4">
-        <Ticket />
-        <div className="flex flex-col flex-wrap gap-2">
-          {items.map((item) => (
-            <BrainstormingItem key={item.id} {...item} />
-          ))}
-        </div>
-      </div>
-      <div className="place-self-start self-center">
-        <Player name="Charlie" hasSelected={true} />
-      </div>
-      <div className="col-span-3 flex justify-center gap-2 self-start">
+      <div className="col-span-3 flex justify-center gap-2">
         <input
           type="text"
-          placeholder="Enter text"
+          placeholder="What comes to mind?"
           className="input"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
         <button className="btn">Submit</button>
       </div>
-    </div>
+    </>
   );
 };
 

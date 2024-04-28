@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { User, client } from "./api";
 
-const Auth = () => {
+const Auth = ({
+  users,
+  setUsers,
+  user,
+  setUser,
+}: {
+  users: User[];
+  setUsers: (users: User[]) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
+}) => {
   const [selectedUsername, setSelectedUsername] = React.useState<string | undefined>(undefined);
-  const [users, setUsers] = useState([] as User[]);
-  const [user, setUser] = useState<User | null>(null);
 
   const reloadUsers = async () => {
     const result = await client.GET("/userliste");
@@ -22,6 +30,7 @@ const Auth = () => {
     const username = localStorage.getItem("username");
     if (username !== selectedUsername) {
       setUser(null);
+      setUser(users[0]); //TODO: remove
       return;
     }
     const userIndex = users.findIndex((predicate) => predicate.name === username);
@@ -50,7 +59,9 @@ const Auth = () => {
     <div className="flex items-center gap-2">
       {user ? (
         <>
-          <span className="text-lg">Logged in as {user.name}</span>
+          <span className="text-lg text-white">
+            Logged in as <span className="font-bold">{user.name}</span>
+          </span>
           <button className="btn" onClick={logout}>
             Logout
           </button>
