@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Ticket from "./Ticket";
 import { Icon } from "@iconify/react";
 
@@ -10,14 +7,10 @@ type Competence = "red" | "yellow" | "green";
 
 export const Player = ({ name, hasSelected }: { name: string; hasSelected: boolean }) => {
   return (
-    <Card className="w-fit">
-      <CardHeader>
-        <CardTitle>{name} </CardTitle>
-        <CardDescription>
-          {hasSelected ? "Selected" : <Icon icon="gg-spinner" className="animate-spin text-xl" />}
-        </CardDescription>
-      </CardHeader>
-    </Card>
+    <div className="w-fit">
+      <h3>{name} </h3>
+      {hasSelected ? "Selected" : <Icon icon="gg-spinner" className="animate-spin text-xl" />}
+    </div>
   );
 };
 
@@ -40,24 +33,20 @@ const Competence = () => {
       </div>
       <div className="col-span-3 flex justify-center gap-2 self-start">
         <div className="max-w-sm">
-          <Select value={selectedCompetence} onValueChange={(e) => setSelectedCompetence(e as Competence)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select your Competence" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="red" className="">
-                Meister
-              </SelectItem>
-              <SelectItem className="400" value="yellow">
-                Ich kenn mich aus
-              </SelectItem>
-              <SelectItem className="00" value="green">
-                Nicht Vertraut
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <select value={selectedCompetence} onChange={(e) => setSelectedCompetence(e.target.value as Competence)}>
+            <option disabled>Select your Competence</option>
+            <option value="red" className="">
+              Meister
+            </option>
+            <option className="400" value="yellow">
+              Ich kenn mich aus
+            </option>
+            <option className="00" value="green">
+              Nicht Vertraut
+            </option>
+          </select>
         </div>
-        <Button>Submit</Button>
+        <button className="btn">Submit</button>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ export type User = paths["/userliste"]["get"]["responses"]["200"]["content"]["*/
 export type Stage = "warte_logon" | "warte_kompetenz" | "warte_brainstorming" | "ende";
 
 export const stageNames: Record<Stage, string> = {
-  warte_logon: "Waiting for all Users to join...",
+  warte_logon: "Waiting",
   warte_kompetenz: "Competence",
   warte_brainstorming: "Brainstorming",
   ende: "Results",

@@ -39,6 +39,9 @@ export interface paths {
   "/schaetzungen": {
     get: operations["getEstimates"];
   };
+  "/calctabelle": {
+    get: operations["getCalcTabelle"];
+  };
   "/calcmittelwert": {
     get: operations["getCalcMittelwert"];
   };
@@ -51,6 +54,9 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    StatusMsg: {
+      msg?: string;
+    };
     User: {
       /** Format: int32 */
       id?: number;
@@ -77,6 +83,13 @@ export interface components {
       minVal?: number;
       /** Format: double */
       maxVal?: number;
+    };
+    TabellenEintrag: {
+      /** Format: int32 */
+      idUser?: number;
+      userName?: string;
+      /** Format: double */
+      punkteSumme?: number;
     };
     Brainstorming: {
       /** Format: int32 */
@@ -114,7 +127,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["StatusMsg"];
         };
       };
     };
@@ -124,7 +137,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["StatusMsg"];
         };
       };
     };
@@ -142,7 +155,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": Record<string, never>;
         };
       };
     };
@@ -158,7 +171,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["StatusMsg"];
         };
       };
     };
@@ -185,7 +198,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["StatusMsg"];
         };
       };
     };
@@ -200,7 +213,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": Record<string, never>;
+          "*/*": components["schemas"]["StatusMsg"];
         };
       };
     };
@@ -215,7 +228,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["StatusMsg"];
         };
       };
     };
@@ -245,7 +258,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "*/*": components["schemas"]["StatusMsg"];
         };
       };
     };
@@ -256,6 +269,16 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["Estimate"][];
+        };
+      };
+    };
+  };
+  getCalcTabelle: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["TabellenEintrag"][];
         };
       };
     };

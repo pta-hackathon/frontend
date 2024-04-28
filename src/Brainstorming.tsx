@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Ticket from "./Ticket";
 import { Icon } from "@iconify/react";
-import { Brain } from "lucide-react";
 
 type Competence = "red" | "yellow" | "green";
 
