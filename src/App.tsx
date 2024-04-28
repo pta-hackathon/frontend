@@ -16,8 +16,8 @@ function App() {
     { id: 4, name: "Waldemar", competence: undefined, isSignedIn: 0, isTestUser: 1 },
   ]);
   const [stage, setStage] = useState<Stage>("warte_logon");
-  const stage2 = "ende_schaetzung" as Stage;
-  // const stage2 = stage;
+  // const stage2 = "ende_schaetzung" as Stage;
+  const stage2 = stage;
 
   useEffect(() => {
     const interval = setInterval(async () => {
