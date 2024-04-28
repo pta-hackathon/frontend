@@ -29,7 +29,7 @@ const Estimation = ({ user, users }: { user: User; users: User[] }) => {
 
   const updateEstimations = async () => {
     const result = await client.GET("/schaetzungen");
-    if (result.data) setEstimations(result.data);
+    if (result.data) setEstimations(result.data.filter((e) => e.idTicket === TICKET_ID));
   };
 
   const sendEstimation = async () => {
@@ -46,6 +46,16 @@ const Estimation = ({ user, users }: { user: User; users: User[] }) => {
     setMinVal(1);
     setMaxVal(2);
     await updateEstimations();
+  };
+
+  const sendEnd = async () => {
+    await client.POST("/", {
+      params: {
+        query: {
+          ticket: TICKET_ID,
+        },
+      },
+    });
   };
 
   useEffect(() => {
@@ -127,6 +137,9 @@ const Estimation = ({ user, users }: { user: User; users: User[] }) => {
         </div>
         <button className="btn" onClick={sendEstimation}>
           Update Schätzung
+        </button>
+        <button className="btn" onClick={sendEnd}>
+          Schätzung abgeben
         </button>
       </div>
       <dialog ref={dialogRef} className="rounded border bg-white p-4">

@@ -3,7 +3,9 @@ export default {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      colors: {},
+      colors: {
+        "pta-blue": "#004676",
+      },
     },
   },
   plugins: [],

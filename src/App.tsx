@@ -17,7 +17,7 @@ function App() {
     { id: 4, name: "Waldemar", competence: undefined, isSignedIn: 0, isTestUser: 1 },
   ]);
   const [stage, setStage] = useState<Stage>("warte_logon");
-  // const stage2 = "warte_estimation" as Stage;
+  // const stage2 = "ende" as Stage;
   const stage2 = stage;
 
   useEffect(() => {
@@ -31,15 +31,17 @@ function App() {
   }, []);
 
   return (
-    <div className="grid h-screen grid-rows-[auto_1fr] bg-green-600">
+    <div className="grid h-screen grid-rows-[auto_1fr] bg-green-600 bg-[url(/texture-3.jpg)] bg-cover">
       <div className="flex">
-        <div className="flex-1">
-          <span className="flex-1 text-white">Server stage: {stage}</span>
+        <div className="flex-1 p-2">
           <button className="btn" onClick={() => client.POST("/reset")}>
             Reset
           </button>
         </div>
-        <h1 className="pt-16 text-center text-5xl font-semibold capitalize text-white">{stageNames[stage2]}</h1>
+        <div className="flex flex-col items-center gap-4 p-4">
+          <div className="h-32 w-32 rounded-full border border-pta-blue bg-transparent bg-[url(/logo.png)] bg-cover shadow-2xl"></div>
+          <h1 className="text-center text-5xl font-semibold capitalize text-white">{stageNames[stage2]}</h1>
+        </div>
         <div className="flex flex-1 items-start justify-end p-2">
           <Auth users={users} setUsers={setUsers} user={user} setUser={setUser} />
         </div>
@@ -53,7 +55,7 @@ function App() {
           <Competence user={user} />
         ) : stage2 === "warte_brainstorming" ? (
           <Brainstorming user={user} users={users} />
-        ) : stage2 === "warte_estimation" ? (
+        ) : stage2 === "ende_schaetzung" ? (
           <Estimation user={user} users={users} />
         ) : stage2 === "ende" ? (
           <Results />

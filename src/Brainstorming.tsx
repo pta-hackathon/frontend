@@ -28,9 +28,10 @@ const Brainstorming = ({ user, users }: { user: User; users: User[] }) => {
   };
 
   useEffect(() => {
+    updateItems();
     const interval = setInterval(updateItems, 1000);
     return () => clearInterval(interval);
-  });
+  }, []);
 
   const sendText = async () => {
     if (!text || !user?.name) return;

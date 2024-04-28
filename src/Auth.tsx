@@ -45,13 +45,13 @@ const Auth = ({
 
   return (
     <div className="flex items-center gap-2">
-      {user && (
+      {/* {user && (
         <>
           <span className="text-lg text-white">
             Logged in as <span className="font-bold">{user.name}</span>
           </span>
         </>
-      )}
+      )} */}
       <select className="select" value={selectedUsername} onChange={(e) => setSelectedUsername(e.target.value)}>
         <option disabled value="">
           Select a user

@@ -5,7 +5,6 @@ const Competence = ({ user }: { user: User }) => {
   const [selectedCompetence, setSelectedCompetence] = useState<CompetenceType | "">("");
 
   const sendCompetence = async () => {
-    console.log(selectedCompetence, user?.name);
     if (!selectedCompetence || !user?.name) return;
     await client.POST("/kompetenz", { params: { query: { user: user.name, kompetenz: selectedCompetence } } });
   };
@@ -18,7 +17,6 @@ const Competence = ({ user }: { user: User }) => {
           <span className="font-bold"> {competenceNames[user.competence as CompetenceType]} </span>
         </div>
       )}
-      {user?.competence}
       <div className="flex items-center justify-center gap-2">
         <div className="max-w-sm">
           <select
