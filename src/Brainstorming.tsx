@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { Icon } from "@iconify/react";
 import { client } from "./api";
 import type { BrainstormingItem as BrainstormingItemType, User } from "./api";
-
-export const Player = ({ name, hasSelected }: { name: string; hasSelected: boolean }) => {
-  return (
-    <div className="flex items-center gap-4 rounded border bg-white p-4">
-      <h3 className="text-xl font-bold">{name}</h3>
-      <div className="text-2xl">
-        {hasSelected ? <Icon icon="mdi-check" /> : <Icon icon="gg-spinner" className="animate-spin" />}
-      </div>
-    </div>
-  );
-};
+import { TICKET_ID } from "./Ticket";
 
 interface BrainstormingItemProps {
   text: string;
@@ -29,17 +18,26 @@ const BrainstormingItem = ({ username, text }: BrainstormingItemProps) => {
   );
 };
 
-const Brainstorming = ({ users }: { users: User[] }) => {
-  const [text, setText] = useState<string | undefined>(undefined);
+const Brainstorming = ({ user, users }: { user: User | null; users: User[] }) => {
+  const [text, setText] = useState<string>("");
   const [items, setItems] = useState<BrainstormingItemType[]>([]);
 
+  const updateItems = async () => {
+    const result = await client.GET("/brainstorming");
+    if (result.data) setItems(result.data);
+  };
+
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const result = await client.GET("/brainstorming");
-      if (result.data) setItems(result.data);
-    }, 1000);
+    const interval = setInterval(updateItems, 1000);
     return () => clearInterval(interval);
   });
+
+  const sendText = async () => {
+    if (!text || !user?.name) return;
+    await client.POST("/brainstorming", { params: { query: { user: user.name, text, idticket: TICKET_ID } } });
+    setText("");
+    await updateItems();
+  };
 
   return (
     <>
@@ -60,7 +58,9 @@ const Brainstorming = ({ users }: { users: User[] }) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <button className="btn">Submit</button>
+        <button className="btn" disabled={text === "" || !user?.name} onClick={sendText}>
+          Submit
+        </button>
       </div>
     </>
   );

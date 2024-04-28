@@ -6,6 +6,7 @@ import { User } from "./api";
 const Player = ({ user }: { user: User }) => {
   return (
     <div className="flex items-center gap-4 rounded border bg-white p-4">
+      <Icon icon="mdi-account" className="text-2xl" />
       <h3 className="text-xl font-bold">{user.name}</h3>
       <div className="text-2xl">
         {user.userstatus !== "fertig" ? <Icon icon="gg-spinner" className="animate-spin" /> : <Icon icon="mdi-check" />}

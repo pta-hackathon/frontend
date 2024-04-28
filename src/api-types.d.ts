@@ -5,6 +5,24 @@
 
 
 export interface paths {
+  "/testUsersSkill": {
+    post: operations["postTestUserskill"];
+  };
+  "/testUsersSchaetzungModify": {
+    post: operations["postTestUserSchaetzungModify"];
+  };
+  "/testUsersSchaetzungInit": {
+    post: operations["postTestUserSchaetzungInit"];
+  };
+  "/testUsersLogout": {
+    post: operations["postTestUserLogout"];
+  };
+  "/testUsersLogin": {
+    post: operations["postTestUserLogin"];
+  };
+  "/testUsersBrainstorm": {
+    post: operations["postTestUserBrainstorm"];
+  };
   "/schaetzung": {
     post: operations["postEstimate"];
   };
@@ -117,6 +135,66 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  postTestUserskill: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["StatusMsg"];
+        };
+      };
+    };
+  };
+  postTestUserSchaetzungModify: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["StatusMsg"];
+        };
+      };
+    };
+  };
+  postTestUserSchaetzungInit: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["StatusMsg"];
+        };
+      };
+    };
+  };
+  postTestUserLogout: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["StatusMsg"];
+        };
+      };
+    };
+  };
+  postTestUserLogin: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["StatusMsg"];
+        };
+      };
+    };
+  };
+  postTestUserBrainstorm: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["StatusMsg"];
+        };
+      };
+    };
+  };
   postEstimate: {
     parameters: {
       query: {
