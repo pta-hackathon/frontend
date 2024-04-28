@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Ticket as TicketType, client } from "./api";
 
-const TICKET_ID = 1;
+export const TICKET_ID = 1;
 
 const Ticket = () => {
   const [ticket, setTicket] = useState<TicketType | null>(null);

@@ -47,7 +47,7 @@ function App() {
         ) : stage2 === "warte_brainstorming" ? (
           <Brainstorming />
         ) : stage2 === "warte_estimation" ? (
-          <Estimation users={users} />
+          <Estimation user={user} users={users} />
         ) : stage2 === "ende" ? (
           <Results />
         ) : null}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import type { Estimation, User } from "./api";
+import { client, type Estimation, type User } from "./api";
+import { TICKET_ID } from "./Ticket";
 
 const MIN = 0;
 const MAX = 20;
@@ -16,7 +17,8 @@ const userIdToColor = (id: number) => {
   return colors[id % colors.length];
 };
 
-const Estimation = ({ users }: { users: User[] }) => {
+const Estimation = ({ user, users }: { user: User | null; users: User[] }) => {
+  const otherUsers = users.filter((u) => u.name !== user?.name);
   const [estimations, setEstimations] = useState<Estimation[]>([
     { id: 1, idUser: 1, minVal: 2, maxVal: 5 },
     { id: 2, idUser: 2, minVal: 4, maxVal: 12 },
@@ -25,13 +27,30 @@ const Estimation = ({ users }: { users: User[] }) => {
   ]);
   const [minVal, setMinVal] = useState<number>(1);
   const [maxVal, setMaxVal] = useState<number>(2);
+  const [tipEstimation, setTipEstimation] = useState<Estimation | undefined>(undefined);
   const [tipUser, setTipUser] = useState<number | undefined>(undefined);
 
   const dialogRef = React.useRef<HTMLDialogElement>(null);
 
-  const showDialog = (userId: number) => {
-    setTipUser(userId);
+  const showDialog = (e: Estimation) => () => {
+    if (e.idUser === user?.id) return;
+    setTipEstimation(e);
     dialogRef.current?.showModal();
+  };
+
+  const sendTip = () => async () => {
+    if (tipEstimation === undefined) return;
+    await client.POST("/rateschaetzer", {
+      params: {
+        query: {
+          user: user?.name || "",
+          tipuser: users.find((u) => u.id === tipUser)?.name || "",
+          idticket: TICKET_ID,
+          idschaetzung: tipEstimation.id || 0,
+        },
+      },
+    });
+    dialogRef.current?.close();
   };
 
   return (
@@ -49,13 +68,15 @@ const Estimation = ({ users }: { users: User[] }) => {
           {estimations.map((e) => (
             <div
               key={e.id}
-              className="h-4 cursor-pointer rounded border border-black hover:opacity-60"
+              className="rounded border border-black hover:opacity-60"
               style={{
                 marginLeft: normalize(min(e)) + "%",
                 width: normalize(max(e) - min(e) + MIN) + "%",
                 backgroundColor: userIdToColor(e.idUser || 0),
+                height: e.idUser === user?.id ? "2rem" : "1rem",
+                cursor: e.idUser === user?.id ? "default" : "pointer",
               }}
-              onClick={showDialog}
+              onClick={showDialog(e)}
             ></div>
           ))}
         </div>
@@ -87,9 +108,14 @@ const Estimation = ({ users }: { users: User[] }) => {
       </div>
       <dialog ref={dialogRef} className="rounded border bg-white p-4">
         <div className="flex w-64 flex-col gap-2">
-          <h2 className="text-xl">Tipp User {users.find((u) => u.id === tipUser)?.name}</h2>
-          <select className="select">
-            {users.map((u) => (
+          <h2 className="text-xl">
+            Tipp User{" "}
+            <span className="capitalize" style={{ background: userIdToColor(tipEstimation?.idUser || 0) }}>
+              {userIdToColor(tipEstimation?.idUser || 0)}
+            </span>
+          </h2>
+          <select className="select" value={tipUser} onChange={(e) => setTipUser(Number(e.target.value))}>
+            {otherUsers.map((u) => (
               <option key={u.id} value={u.id}>
                 {u.name}
               </option>
@@ -99,7 +125,9 @@ const Estimation = ({ users }: { users: User[] }) => {
             <button className="btn" onClick={() => dialogRef.current?.close()}>
               Cancel
             </button>
-            <button className="btn">Submit</button>
+            <button className="btn" onClick={sendTip()}>
+              Submit
+            </button>
           </div>
         </div>
       </dialog>
