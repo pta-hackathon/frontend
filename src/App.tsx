@@ -6,7 +6,6 @@ import Auth from "./Auth";
 import { Stage, User, client, stageNames } from "./api";
 import Poker from "./Poker";
 import Estimation from "./Estimation";
-import Results from "./Results";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
