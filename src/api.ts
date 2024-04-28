@@ -7,6 +7,8 @@ export type User = paths["/userliste"]["get"]["responses"]["200"]["content"]["*/
 export type Stage = "warte_logon" | "warte_kompetenz" | "warte_brainstorming" | "warte_estimation" | "ende";
 export type Ticket = paths["/tickets"]["get"]["responses"]["200"]["content"]["*/*"][0];
 export type Estimation = paths["/schaetzungen"]["get"]["responses"]["200"]["content"]["*/*"][0];
+export type BrainstormingItem = paths["/brainstorming"]["get"]["responses"]["200"]["content"]["*/*"][0];
+export type Competence = "rot" | "gelb" | "gruen";
 
 export const stageNames: Record<Stage, string> = {
   warte_logon: "Waiting",
@@ -14,4 +16,10 @@ export const stageNames: Record<Stage, string> = {
   warte_brainstorming: "Brainstorming",
   warte_estimation: "Estimation",
   ende: "Results",
+};
+
+export const competenceNames: Record<Competence, string> = {
+  rot: "Master",
+  gelb: "Ganz okay",
+  gruen: "Nicht so gut",
 };

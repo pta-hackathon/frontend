@@ -66,6 +66,7 @@ export interface components {
       isSignedIn?: number;
       /** Format: int32 */
       isTestUser?: number;
+      userstatus?: string;
     };
     Tickets: {
       /** Format: int32 */
@@ -119,7 +120,7 @@ export interface operations {
   postEstimate: {
     parameters: {
       query: {
-        user: string;
+        username: string;
         ticket: number;
         minval: number;
         maxval: number;

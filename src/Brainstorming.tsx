@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Icon } from "@iconify/react";
+import { client } from "./api";
+import type { BrainstormingItem as BrainstormingItemType, User } from "./api";
 
 export const Player = ({ name, hasSelected }: { name: string; hasSelected: boolean }) => {
   return (
@@ -13,14 +15,7 @@ export const Player = ({ name, hasSelected }: { name: string; hasSelected: boole
   );
 };
 
-const items: BrainstormingItemProps[] = [
-  { id: 1, username: "Alice", text: "Datenbank Tabelle erstellen" },
-  { id: 2, username: "Bob", text: "Port in Firewall freischalten" },
-  { id: 3, username: "Bob", text: "Port in Firewall freischalten and other stuff" },
-];
-
 interface BrainstormingItemProps {
-  id: number;
   text: string;
   username: string;
 }
@@ -34,13 +29,27 @@ const BrainstormingItem = ({ username, text }: BrainstormingItemProps) => {
   );
 };
 
-const Brainstorming = () => {
+const Brainstorming = ({ users }: { users: User[] }) => {
   const [text, setText] = useState<string | undefined>(undefined);
+  const [items, setItems] = useState<BrainstormingItemType[]>([]);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const result = await client.GET("/brainstorming");
+      if (result.data) setItems(result.data);
+    }, 1000);
+    return () => clearInterval(interval);
+  });
+
   return (
     <>
       <div className="flex flex-col flex-wrap gap-2">
         {items.map((item) => (
-          <BrainstormingItem key={item.id} {...item} />
+          <BrainstormingItem
+            key={item.id}
+            username={users.find((u) => u.id === item.idUser)?.name || ""}
+            text={item.text || ""}
+          />
         ))}
       </div>
       <div className="col-span-3 flex justify-center gap-2">

@@ -1,41 +1,45 @@
 import React, { useState } from "react";
+import { User, client, competenceNames, type Competence as CompetenceType } from "./api";
 
-import { Icon } from "@iconify/react";
+const Competence = ({ user }: { user: User | null }) => {
+  const [selectedCompetence, setSelectedCompetence] = useState<CompetenceType | "">("");
 
-type Competence = "red" | "yellow" | "green";
+  const sendCompetence = async () => {
+    console.log(selectedCompetence, user?.name);
+    if (!selectedCompetence || !user?.name) return;
+    await client.POST("/kompetenz", { params: { query: { user: user.name, kompetenz: selectedCompetence } } });
+  };
 
-export const Player = ({ name, hasSelected }: { name: string; hasSelected: boolean }) => {
   return (
-    <div className="w-fit">
-      <h3>{name} </h3>
-      {hasSelected ? "Selected" : <Icon icon="gg-spinner" className="animate-spin text-xl" />}
-    </div>
-  );
-};
-
-const Competence = () => {
-  const [selectedCompetence, setSelectedCompetence] = useState<Competence | undefined>(undefined);
-  return (
-    <div className="col-span-3 flex items-center justify-center gap-2">
-      <div className="max-w-sm">
-        <select
-          value={selectedCompetence}
-          onChange={(e) => setSelectedCompetence(e.target.value as Competence)}
-          className="select"
-        >
-          <option disabled>Select your Competence</option>
-          <option value="red" className="">
-            Meister
-          </option>
-          <option className="400" value="yellow">
-            Ich kenn mich aus
-          </option>
-          <option className="00" value="green">
-            Nicht Vertraut
-          </option>
-        </select>
+    <div className="flex flex-col gap-4">
+      {user?.competence && (
+        <div className="text-center text-white">
+          Your selected competence is:
+          <span className="font-bold"> {competenceNames[user.competence as CompetenceType]} </span>
+        </div>
+      )}
+      {user?.competence}
+      <div className="flex items-center justify-center gap-2">
+        <div className="max-w-sm">
+          <select
+            value={selectedCompetence}
+            onChange={(e) => setSelectedCompetence(e.target.value as CompetenceType)}
+            className="select"
+          >
+            <option value="" disabled>
+              Select your Competence
+            </option>
+            {(["rot", "gelb", "gruen"] as CompetenceType[]).map((c) => (
+              <option key={c} value={c} className="">
+                {competenceNames[c]}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button className="btn" onClick={sendCompetence}>
+          Submit
+        </button>
       </div>
-      <button className="btn">Submit</button>
     </div>
   );
 };

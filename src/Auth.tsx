@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { User, client } from "./api";
 
 const Auth = ({
@@ -12,25 +12,24 @@ const Auth = ({
   user: User | null;
   setUser: (user: User | null) => void;
 }) => {
-  const [selectedUsername, setSelectedUsername] = React.useState<string | undefined>(undefined);
+  const [selectedUsername, setSelectedUsername] = useState<string | "">("");
 
   const reloadUsers = async () => {
     const result = await client.GET("/userliste");
     if (result.data) {
       setUsers(result.data);
-      if (!selectedUsername && result.data.length > 0) setSelectedUsername(result.data[0].name);
     }
   };
 
   useEffect(() => {
-    reloadUsers();
+    const interval = setInterval(reloadUsers, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     const username = localStorage.getItem("username");
     if (username !== selectedUsername) {
       setUser(null);
-      setUser(users[0]); //TODO: remove
       return;
     }
     const userIndex = users.findIndex((predicate) => predicate.name === username);
@@ -69,13 +68,16 @@ const Auth = ({
       ) : (
         <>
           <select className="select" value={selectedUsername} onChange={(e) => setSelectedUsername(e.target.value)}>
+            <option disabled value="">
+              Select a user
+            </option>
             {users.map((user) => (
               <option key={user.id} value={user.name}>
                 {user.name}
               </option>
             ))}
           </select>
-          <button className="btn" onClick={login}>
+          <button className="btn" onClick={login} disabled={selectedUsername === ""}>
             Login
           </button>
         </>

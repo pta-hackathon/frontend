@@ -4,7 +4,7 @@
 
 @layer base {
   .btn {
-    @apply cursor-pointer rounded border bg-white px-6 py-2 font-bold text-black hover:bg-gray-200;
+    @apply cursor-pointer rounded border bg-white px-6 py-2 font-bold text-black hover:bg-gray-200 disabled:cursor-not-allowed disabled:contrast-50;
   }
   .input {
     @apply rounded border px-2 py-1 text-black;
